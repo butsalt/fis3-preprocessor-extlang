@@ -37,6 +37,7 @@ module.exports = function(content, file, conf) {
           }
 
           params = params.replace(/\sfile\s*=\s*('|")(.+?)\1/ig, function(_, quote, value) {
+            // file='namespace:xxx/yyy.tpl'，要求的文件名无法被smarty直接解析
             return ' file=' + lang.tpl.ld + quote + value + quote + lang.tpl.rd;
           });
           break;
@@ -84,6 +85,7 @@ function onStandardRestore(message) {
   var info = fis.project.lookup(message.value, message.file);
 
   if (info.file) {
+    // namespace:xxx/yyy.tpl -> namespace/xxx/yyy.tpl
     message.ret = info.quote + info.id.replace(/\:/g, '/') + info.quote;
   } else {
     message.ret = message.value;
